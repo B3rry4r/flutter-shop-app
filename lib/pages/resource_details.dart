@@ -49,6 +49,8 @@ class _ResourceDetailsPageState extends State<ResourceDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -65,15 +67,22 @@ class _ResourceDetailsPageState extends State<ResourceDetailsPage> {
           ),
           const Spacer(),
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            child: Image(
-              image: AssetImage(widget.product['url'] as String),
-              width: double.infinity,
-              height: 350,
-              fit: BoxFit.cover,
-            ),
-          ),
+              margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: size.width > 650
+                  ? Image(
+                      image: AssetImage(widget.product['url'] as String),
+                      width: 500,
+                      height: 250,
+                      fit: BoxFit.cover,
+                    )
+                  : Image(
+                      image: AssetImage(widget.product['url'] as String),
+                      width: double.infinity,
+                      height: 350,
+                      fit: BoxFit.cover,
+                    )),
           const Spacer(),
           Container(
             width: double.infinity,
@@ -94,41 +103,44 @@ class _ResourceDetailsPageState extends State<ResourceDetailsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount:
-                            (widget.product['sizes'] as List<int>).length,
-                        itemBuilder: (context, index) {
-                          final size =
-                              (widget.product['sizes'] as List<int>)[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedSize = size;
-                                });
-                              },
-                              child: Chip(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      40), // Adjust the radius as needed
-                                  side: const BorderSide(
-                                    color: Color.fromARGB(255, 219, 219, 219),
+                  Center(
+                    child: SizedBox(
+                      width: size.width > 650 ? 460 : double.infinity,
+                      height: 50,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount:
+                              (widget.product['sizes'] as List<int>).length,
+                          itemBuilder: (context, index) {
+                            final size =
+                                (widget.product['sizes'] as List<int>)[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedSize = size;
+                                  });
+                                },
+                                child: Chip(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        40), // Adjust the radius as needed
+                                    side: const BorderSide(
+                                      color: Color.fromARGB(255, 219, 219, 219),
+                                    ),
+                                  ),
+                                  backgroundColor: selectedSize == size
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                  label: Text(
+                                    size.toString(),
                                   ),
                                 ),
-                                backgroundColor: selectedSize == size
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
-                                label: Text(
-                                  size.toString(),
-                                ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
                   ),
                   // const SizedBox(
                   //   height: 10,
